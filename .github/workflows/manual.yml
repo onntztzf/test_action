@@ -41,6 +41,10 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
       run: |
+        mv markdowns/* .
+        rm -rf markdowns
+        rm package*
+        rm -rf node_modules
         ls
     # - name: Commit and Push
     #   run: |
