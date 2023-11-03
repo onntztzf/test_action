@@ -3,11 +3,11 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // Configuration settings, including GitHub access token, repository owner, and repository name
-const config = {
-    github_token: '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', // Replace with your GitHub access token
-    owner: 'onntztzf', // Replace with the owner of the repository
-    repo: 'blog', // Replace with the name of the repository
-};
+// const config = {
+//     github_token: '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', // Replace with your GitHub access token
+//     owner: 'onntztzf', // Replace with the owner of the repository
+//     repo: 'blog', // Replace with the name of the repository
+// };
 
 // Asynchronous function to write data to a file
 async function writeToFileSync(filePath, data) {
@@ -106,7 +106,22 @@ async function main() {
     console.log(process.env)
     console.log(process.env.GITHUB_TOKEN)
 
+    const repo = process.env.GITHUB_REPOSITORY;
+
+    // 使用 split 方法将字符串拆分为数组
+    const parts = repo.split("/");
+    
+    // parts[0] 包含用户名，parts[1] 包含仓库名称
+    const username = parts[0];
+    const repoName = parts[1];
+    
+    console.log("Username:", username);
+    console.log("Repository Name:", repoName);
+
+    
     return;
+
+    
     
     const {owner, repo} = config;
     console.log('Fetching discussions...');
