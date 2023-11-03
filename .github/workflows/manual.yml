@@ -41,7 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
       run: |
-        find /path/to/start/directory -type d -name 'markdowns' -prune -o -type f -name 'file_to_exclude' -exec rm {} \;
+        find . -type d -name 'markdowns' -prune -o -type f -name 'file_to_exclude' -exec rm {} \;
         mv markdowns/* .
         ls
     - name: Commit and Push
