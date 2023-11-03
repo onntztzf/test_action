@@ -36,18 +36,18 @@ jobs:
     - name: Install dependencies
       run: npm install @octokit/graphql
     - name: Run script
-      run: node disscussion_to_markdown.js
+      run: node scripts/disscussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
       run: |
-        find . -type d -name 'markdowns' -prune -o -type f -name 'file_to_exclude' -exec rm {} \;
+        find . -type d ! -name 'scripts' -o ! -name 'markdowns' -exec rm -rf {} \;
         mv markdowns/* .
         ls
-    - name: Commit and Push
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add README.md SUMMARY.md
-        git commit -m "Generate README and SUMMARY"
-        git push origin HEAD:${{ github.ref }}
+    # - name: Commit and Push
+    #   run: |
+    #     git config user.name github-actions
+    #     git config user.email github-actions@github.com
+    #     git add README.md SUMMARY.md
+    #     git commit -m "Generate README and SUMMARY"
+    #     git push origin HEAD:${{ github.ref }}
