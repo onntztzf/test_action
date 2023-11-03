@@ -3,11 +3,11 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // Configuration settings, including GitHub access token, repository owner, and repository name
-// const config = {
-//     github_token: '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', // Replace with your GitHub access token
-//     owner: 'onntztzf', // Replace with the owner of the repository
-//     repo: 'blog', // Replace with the name of the repository
-// };
+const config = {
+    github_token: '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', // Replace with your GitHub access token
+    owner: 'onntztzf', // Replace with the owner of the repository
+    repo: 'blog', // Replace with the name of the repository
+};
 
 // Asynchronous function to write data to a file
 async function writeToFileSync(filePath, data) {
