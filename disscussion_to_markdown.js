@@ -104,7 +104,6 @@ async function fetchDiscussions(owner, repo, limit = 10) {
 async function main() {
 
     console.log(process.env)
-    console.log(process.env.GITHUB_TOKEN)
 
     const repo = process.env.GITHUB_REPOSITORY;
 
@@ -118,59 +117,53 @@ async function main() {
     console.log("Username:", username);
     console.log("Repository Name:", repoName);
 
-    
-    // return;
+    console.log('Fetching discussions...');
+    let allDiscussions = await fetchDiscussions(username, repoName);
+    console.log('Fetched', allDiscussions.length, 'discussions.');
 
-    
-    
-    // const {owner, repo} = config;
-    // console.log('Fetching discussions...');
-    // let allDiscussions = await fetchDiscussions(owner, repo);
-    // console.log('Fetched', allDiscussions.length, 'discussions.');
+    // Filter discussions where the author association is the OWNER
+    allDiscussions = allDiscussions.filter(discussion => discussion.authorAssociation === "OWNER");
 
-    // // Filter discussions where the author association is the OWNER
-    // allDiscussions = allDiscussions.filter(discussion => discussion.authorAssociation === "OWNER");
+    const writePromises = allDiscussions.map(async (discussion) => {
+        try {
+            const jsonFilePath = `discussions/${discussion.number}_${discussion.id}.json`;
+            await writeToFileSync(jsonFilePath, JSON.stringify(discussion, null, 2));
 
-    // const writePromises = allDiscussions.map(async (discussion) => {
-    //     try {
-    //         const jsonFilePath = `discussions/${discussion.number}_${discussion.id}.json`;
-    //         await writeToFileSync(jsonFilePath, JSON.stringify(discussion, null, 2));
+            const updatedAtInUTC = new Date(discussion.updatedAt);
+            const updatedAt = updatedAtInUTC.toLocaleString("zh-Hans", { timeZone: "Asia/Shanghai" });
 
-    //         const updatedAtInUTC = new Date(discussion.updatedAt);
-    //         const updatedAt = updatedAtInUTC.toLocaleString("zh-Hans", { timeZone: "Asia/Shanghai" });
+            const metadata = {
+                author: discussion.author?.login || '',
+                category: (discussion.category?.emojiHTML ? discussion.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : '') + (discussion.category?.name || ''),
+                labels: (discussion.labels?.nodes || []).map(label => label.name).join(', '),
+                discussion: discussion.url || '',
+                updated_at: updatedAt || '',
+            };
 
-    //         const metadata = {
-    //             author: discussion.author?.login || '',
-    //             category: (discussion.category?.emojiHTML ? discussion.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : '') + (discussion.category?.name || ''),
-    //             labels: (discussion.labels?.nodes || []).map(label => label.name).join(', '),
-    //             discussion: discussion.url || '',
-    //             updated_at: updatedAt || '',
-    //         };
+            const frontMatter = Object.entries(metadata)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join('\n');
 
-    //         const frontMatter = Object.entries(metadata)
-    //             .map(([key, value]) => `${key}: ${value}`)
-    //             .join('\n');
+            const markdownTitle = `# ${discussion.title || 'Unknown Title'}`;
+            const markdownBody = discussion.body.trim() || 'No content';
 
-    //         const markdownTitle = `# ${discussion.title || 'Unknown Title'}`;
-    //         const markdownBody = discussion.body.trim() || 'No content';
+            const createdAtInUTC = new Date(discussion.createdAt);
+            const createdAtInCST = new Date(createdAtInUTC.toLocaleString("zh-Hans", { timeZone: "Asia/Shanghai" }));
+            // 获取年份
+            const year = createdAtInCST.getFullYear();
+            // 获取月份（注意：月份从0开始，所以需要加1）
+            const month = createdAtInCST.getMonth() + 1;
 
-    //         const createdAtInUTC = new Date(discussion.createdAt);
-    //         const createdAtInCST = new Date(createdAtInUTC.toLocaleString("zh-Hans", { timeZone: "Asia/Shanghai" }));
-    //         // 获取年份
-    //         const year = createdAtInCST.getFullYear();
-    //         // 获取月份（注意：月份从0开始，所以需要加1）
-    //         const month = createdAtInCST.getMonth() + 1;
+            const mdFilePath = `markdowns/${year}/${month}/${discussion.number}_${discussion.id}.md`;
+            await writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`);
+        } catch (error) {
+            console.error('Error processing discussion:', error);
+            throw error;
+        }
+    });
+    await Promise.all(writePromises);
 
-    //         const mdFilePath = `markdowns/${year}/${month}/${discussion.number}_${discussion.id}.md`;
-    //         await writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`);
-    //     } catch (error) {
-    //         console.error('Error processing discussion:', error);
-    //         throw error;
-    //     }
-    // });
-    // await Promise.all(writePromises);
-
-    // console.log("Done. Total discussions:", allDiscussions.length);
+    console.log("Done. Total discussions:", allDiscussions.length);
 }
 
 // Execute the main function to start the process
