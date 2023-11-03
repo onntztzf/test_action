@@ -102,6 +102,12 @@ async function fetchDiscussions(owner, repo, limit = 10) {
 
 // Main asynchronous function to orchestrate the process
 async function main() {
+
+    console.log(process.env)
+    console.log(process.env.GITHUB_TOKEN)
+
+    return;
+    
     const {owner, repo} = config;
     console.log('Fetching discussions...');
     let allDiscussions = await fetchDiscussions(owner, repo);
