@@ -23,7 +23,7 @@ async function writeToFileSync(filePath, data) {
 }
 
 // Asynchronous function to fetch discussions from a GitHub repository
-async function fetchDiscussions(owner, repo, limit = 10) {
+async function fetchDiscussions(token, owner, repo, limit = 10) {
     let hasMore = true;
     let afterCursor = null;
     const all_discussions = [];
@@ -78,7 +78,7 @@ async function fetchDiscussions(owner, repo, limit = 10) {
     // Create a GraphQL client with authentication using the provided access token
     const graphqlWithAuth = graphql.defaults({
         headers: {
-            authorization: `token ${config.github_token}`,
+            authorization: `token ${token}`,
         },
     });
 
@@ -118,7 +118,7 @@ async function main() {
     console.log("Repository Name:", repoName);
 
     console.log('Fetching discussions...');
-    let allDiscussions = await fetchDiscussions(username, repoName);
+    let allDiscussions = await fetchDiscussions(process.env.GITHUB_TOKEN,username, repoName);
     console.log('Fetched', allDiscussions.length, 'discussions.');
 
     // Filter discussions where the author association is the OWNER
