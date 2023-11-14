@@ -169,7 +169,7 @@ async function main() {
     contents.reverse()
     for (let i = 0; i < contents.length; i++) {
         const v = contents[i];
-        output += `| ${v[0]} | (${v[1]}) | ${v[2]} |\n`;
+        output += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
     }
     output += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
     output += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
