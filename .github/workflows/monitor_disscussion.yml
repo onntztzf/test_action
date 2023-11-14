@@ -35,6 +35,10 @@ jobs:
       uses: actions/setup-node@v4.0.0
     - name: Install dependencies
       run: npm install @octokit/graphql
+    - name: Display Workspace Directory
+      run: echo "Workspace Directory: $GITHUB_WORKSPACE"
+    - name: Display Workspace Directory
+      run: echo "Workspace Directory: $GITHUB_ACTION_PATH"
     - name: Run script
       run: node disscussion_to_markdown.js
       env:
