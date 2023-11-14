@@ -43,7 +43,7 @@ jobs:
     - name: Display Workspace Directory
       run: echo ${GITHUB_ACTION_PATH}
     - name: Run script
-      run: node disscussion_to_markdown.js
+      run: node .github/workflows/disscussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
