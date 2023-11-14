@@ -151,7 +151,7 @@ async function main() {
             const month = createdAtInCST.getMonth() + 1;
 
             const mdFilePath = `markdowns/${year}/${month}/${discussion.number}_${discussion.id}.md`;
-            contents.push([`${year}/${month}`, `${year}/${month}/${discussion.number}_${discussion.id}.md`, updatedAt])
+            contents.push([`${year}/${month}`, `[${discussion.title}](${year}/${month}/${discussion.number}_${discussion.id}.md)`, updatedAt])
             await writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`);
         } catch (error) {
             console.error('Error processing discussion:', error);
@@ -169,7 +169,7 @@ async function main() {
     contents.reverse()
     for (let i = 0; i < contents.length; i++) {
         const v = contents[i];
-        output += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+        output += `| ${v[0]} | (${v[1]}) | ${v[2]} |\n`;
     }
     output += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
     output += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
