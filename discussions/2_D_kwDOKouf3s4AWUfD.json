@@ -1,0 +1,36 @@
+{
+  "id": "D_kwDOKouf3s4AWUfD",
+  "labels": {
+    "nodes": [
+      {
+        "id": "LA_kwDOKouf3s8AAAABb2bZNw",
+        "name": "documentation",
+        "resourcePath": "/onntztzf/test_action/labels/documentation",
+        "url": "https://github.com/onntztzf/test_action/labels/documentation"
+      }
+    ]
+  },
+  "category": {
+    "id": "DIC_kwDOKouf3s4Cap9H",
+    "name": "General",
+    "emoji": ":speech_balloon:",
+    "emojiHTML": "<div>💬</div>",
+    "slug": "general"
+  },
+  "number": 2,
+  "title": "111",
+  "body": "111",
+  "author": {
+    "login": "onntztzf"
+  },
+  "authorAssociation": "OWNER",
+  "createdAt": "2023-11-14T15:42:36Z",
+  "updatedAt": "2023-11-14T15:42:36Z",
+  "repository": {
+    "id": "R_kgDOKouf3g",
+    "url": "https://github.com/onntztzf/test_action",
+    "resourcePath": "/onntztzf/test_action"
+  },
+  "url": "https://github.com/onntztzf/test_action/discussions/2",
+  "resourcePath": "/onntztzf/test_action/discussions/2"
+}
