@@ -35,6 +35,9 @@ jobs:
       uses: actions/setup-node@v4.0.0
     - name: Install dependencies
       run: npm install @octokit/graphql
+    - name: Display Current Working Directory
+      run: |
+        echo "Current Working Directory: $(pwd)"
     - name: Display Workspace Directory
       run: echo ${GITHUB_WORKSPACE}
     - name: Display Workspace Directory
