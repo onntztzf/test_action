@@ -161,19 +161,33 @@ async function main() {
 
     await Promise.all(writePromises);
 
-    let output = "# README\n\n";
-    output += "Just a repository for blogs. :)\n\n";
-    output += "## Table of Contents\n\n";
-    output += "| Directory | File | Last Updated |\n";
-    output += "| --- | --- | --- |\n";
-    contents.reverse()
-    for (let i = 0; i < contents.length; i++) {
-        const v = contents[i];
-        output += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-    }
-    output += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-    output += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-    await writeToFileSync("README.md", output)
+    // contents.reverse()
+
+    // let README = "# README\n\n";
+    // README += "Just a repository for blogs. :)\n\n";
+    // README += "## Table of Contents\n\n";
+    // README += "| Directory | File | Last Updated |\n";
+    // README += "| --- | --- | --- |\n";
+    // for (let i = 0; i < contents.length; i++) {
+    //     const v = contents[i];
+    //     README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+    // }
+    // README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+    // README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+    // await writeToFileSync("README.md", README)
+
+    // let SUMMARY = "# SUMMARY\n\n";
+    // SUMMARY += "Just a repository for blogs. :)\n\n";
+    // SUMMARY += "## Table of Contents\n\n";
+    // SUMMARY += "| Directory | File | Last Updated |\n";
+    // SUMMARY += "| --- | --- | --- |\n";
+    // for (let i = 0; i < contents.length; i++) {
+    //     const v = contents[i];
+    //     README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+    // }
+    // SUMMARY += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+    // SUMMARY += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+    // await writeToFileSync("README.md", SUMMARY)
 
     console.log("Done. Total discussions:", allDiscussions.length);
 }
