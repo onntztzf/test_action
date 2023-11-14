@@ -48,10 +48,15 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
       run: |
+        # 显式启用 extglob 选项
+        shopt -s extglob
+
+        # 删除除了"markdowns"和"discussions"文件夹之外的所有文件和文件夹
+        rm -r !(markdowns|discussions)
         mv markdowns/* .
         rm -rf markdowns
-        rm package*
-        rm -rf node_modules
+        # rm package*
+        # rm -rf node_modules
         ls
     - name: Commit and Push
       run: |
