@@ -36,7 +36,7 @@ jobs:
     - name: Install dependencies
       run: npm install @octokit/graphql
     - name: Run script
-      run: node scripts/disscussion_to_markdown.js
+      run: node disscussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
