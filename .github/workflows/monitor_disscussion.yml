@@ -36,7 +36,9 @@ jobs:
     needs: install-dependencies
     steps:
     - name: Run script
-      run: node ./.github/workflows/discussion_to_markdown.js
+      run:
+        echo $(pwd)
+        node ./.github/workflows/discussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
