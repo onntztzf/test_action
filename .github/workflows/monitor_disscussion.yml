@@ -29,6 +29,7 @@ jobs:
     needs: [setup-node, checkout]
     steps:
     - name: Install dependencies
+      working-directory: ./
       run: npm install @octokit/graphql
 
   run-script:
@@ -38,7 +39,7 @@ jobs:
     - name: Run script
       run:
         echo $(pwd)
-        node ./.github/workflows/discussion_to_markdown.js
+        node .github/workflows/discussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
