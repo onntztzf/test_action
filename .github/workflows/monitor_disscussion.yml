@@ -29,8 +29,8 @@ jobs:
       run: |
         shopt -s extglob
         # rm -r !(markdowns|discussions|README.md)
-        mv markdowns/* .
-        rm -rf markdowns
+        mv -f markdowns/* .
+        # rm -rf markdowns
         ls
     - name: Commit and Push
       run: |
