@@ -1,19 +1,12 @@
-const {graphql} = require("@octokit/graphql");
+const { graphql } = require("@octokit/graphql");
 const fs = require('fs').promises;
 const path = require('path');
-
-// Configuration settings, including GitHub access token, repository owner, and repository name
-const config = {
-    github_token: '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', // Replace with your GitHub access token
-    owner: 'onntztzf', // Replace with the owner of the repository
-    repo: 'blog', // Replace with the name of the repository
-};
 
 // Asynchronous function to write data to a file
 async function writeToFileSync(filePath, data) {
     try {
         const directory = path.dirname(filePath);
-        await fs.mkdir(directory, {recursive: true});
+        await fs.mkdir(directory, { recursive: true });
         await fs.writeFile(filePath, data);
         console.log('File written successfully:', filePath);
     } catch (error) {
@@ -84,7 +77,7 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
 
     while (hasMore) {
         try {
-            const response = await graphqlWithAuth(query, {owner, repo, after: afterCursor, limit});
+            const response = await graphqlWithAuth(query, { owner, repo, after: afterCursor, limit });
             const discussions = response.repository.discussions.nodes;
             all_discussions.push(...discussions);
 
@@ -109,21 +102,24 @@ async function main() {
 
     // 使用 split 方法将字符串拆分为数组
     const parts = repo.split("/");
-    
+
     // parts[0] 包含用户名，parts[1] 包含仓库名称
     const username = parts[0];
     const repoName = parts[1];
-    
+
     console.log("Username:", username);
     console.log("Repository Name:", repoName);
 
     console.log('Fetching discussions...');
-    let allDiscussions = await fetchDiscussions(process.env.GITHUB_TOKEN,username, repoName);
+    let allDiscussions = await fetchDiscussions(process.env.GITHUB_TOKEN, username, repoName);
     console.log('Fetched', allDiscussions.length, 'discussions.');
 
     // Filter discussions where the author association is the OWNER
     allDiscussions = allDiscussions.filter(discussion => discussion.authorAssociation === "OWNER");
 
+    allDiscussions.sort((a, b) => a.updatedAt.localeCompare(b.updatedAt));
+
+    const contents = [];
     const writePromises = allDiscussions.map(async (discussion) => {
         try {
             const jsonFilePath = `discussions/${discussion.number}_${discussion.id}.json`;
@@ -151,16 +147,31 @@ async function main() {
             const createdAtInCST = new Date(createdAtInUTC.toLocaleString("zh-Hans", { timeZone: "Asia/Shanghai" }));
             // 获取年份
             const year = createdAtInCST.getFullYear();
-            // 获取月份（注意：月份从0开始，所以需要加1）
+            // 获取月份（注意：月份从 0 开始，所以需要加 1）
             const month = createdAtInCST.getMonth() + 1;
 
             const mdFilePath = `markdowns/${year}/${month}/${discussion.number}_${discussion.id}.md`;
+            contents.push([`${year}/${month}`, `${year}/${month}/${discussion.number}_${discussion.id}.md`, updatedAt])
             await writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`);
         } catch (error) {
             console.error('Error processing discussion:', error);
             throw error;
         }
     });
+
+    let output = "# README\n\n";
+    output += "Just a repository for blogs. :)\n\n";
+    output += "## Table of Contents\n\n";
+    output += "| Directory | File | Last Updated |\n";
+    output += "| --- | --- | --- |\n";
+    contents.reverse()
+    for (let i = 0; i < contents.length; i++) {
+        const v = contents[i];
+        output += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+    }
+    output += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+    output += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+    writePromises.push(writeToFileSync("README.md", output))
     await Promise.all(writePromises);
 
     console.log("Done. Total discussions:", allDiscussions.length);
