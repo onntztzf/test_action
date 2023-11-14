@@ -159,6 +159,8 @@ async function main() {
         }
     });
 
+    await Promise.all(writePromises);
+
     let output = "# README\n\n";
     output += "Just a repository for blogs. :)\n\n";
     output += "## Table of Contents\n\n";
@@ -171,8 +173,7 @@ async function main() {
     }
     output += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
     output += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-    writePromises.push(writeToFileSync("README.md", output))
-    await Promise.all(writePromises);
+    await writeToFileSync("README.md", output)
 
     console.log("Done. Total discussions:", allDiscussions.length);
 }
