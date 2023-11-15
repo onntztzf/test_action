@@ -188,7 +188,7 @@ async function main() {
     }
     READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(","), metadata.updatedAt])
     const key = `${year}/${month}`;
-    const existing = SUMMARYData.get(key);
+    let existing = SUMMARYData.get(key);
     if (existing) {
       existing.push(`[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`)
     } else {
