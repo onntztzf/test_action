@@ -3,6 +3,12 @@
   "labels": {
     "nodes": [
       {
+        "id": "LA_kwDOKouf3s8AAAABb2bZMw",
+        "name": "bug",
+        "resourcePath": "/onntztzf/test_action/labels/bug",
+        "url": "https://github.com/onntztzf/test_action/labels/bug"
+      },
+      {
         "id": "LA_kwDOKouf3s8AAAABb2bZNw",
         "name": "documentation",
         "resourcePath": "/onntztzf/test_action/labels/documentation",
@@ -11,21 +17,21 @@
     ]
   },
   "category": {
-    "id": "DIC_kwDOKouf3s4Cap9H",
-    "name": "General",
-    "emoji": ":speech_balloon:",
-    "emojiHTML": "<div>💬</div>",
-    "slug": "general"
+    "id": "DIC_kwDOKouf3s4Cap9G",
+    "name": "Announcements",
+    "emoji": ":mega:",
+    "emojiHTML": "<div>📣</div>",
+    "slug": "announcements"
   },
   "number": 2,
-  "title": "111",
+  "title": "2",
   "body": "111",
   "author": {
     "login": "onntztzf"
   },
   "authorAssociation": "OWNER",
   "createdAt": "2023-11-14T15:42:36Z",
-  "updatedAt": "2023-11-14T15:42:36Z",
+  "updatedAt": "2023-11-15T17:33:37Z",
   "repository": {
     "id": "R_kgDOKouf3g",
     "url": "https://github.com/onntztzf/test_action",

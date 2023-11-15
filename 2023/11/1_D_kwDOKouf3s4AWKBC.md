@@ -1,9 +1,9 @@
 ---
 author: onntztzf
 category: 📣 Announcements
-labels: 
+labels: "-"
 discussion: https://github.com/onntztzf/test_action/discussions/1
-updated_at: 2023/11/3 17:27:53
+updatedAt: 2023-11-15 21:02:13
 ---
 
 # 1

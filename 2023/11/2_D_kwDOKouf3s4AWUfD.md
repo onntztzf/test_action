@@ -1,11 +1,11 @@
 ---
 author: onntztzf
-category: 💬 General
-labels: documentation
+category: 📣 Announcements
+labels: bug, documentation
 discussion: https://github.com/onntztzf/test_action/discussions/2
-updated_at: 2023/11/14 23:42:36
+updatedAt: 2023-11-16 01:33:37
 ---
 
-# 111
+# 2
 
 111
