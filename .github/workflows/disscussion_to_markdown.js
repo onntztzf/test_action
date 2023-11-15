@@ -220,7 +220,7 @@ async function main() {
     }
     for (let i = 0; i < value.length; i++) {
       const element = value[i];
-      SUMMARY += `  - ${element}"\n"`
+      SUMMARY += `  - ${element}\n`
     }
     lastKey = key
   })
