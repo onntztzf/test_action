@@ -213,7 +213,7 @@ async function main() {
   writePromises.push(writeToFileSync("README.md", README));
 
   let SUMMARY = "# SUMMARY\n\n";
-  const lastKey = ''
+  let lastKey = ''
   SUMMARYData.forEach(function (value, key, map) {
     if (lastKey !== key) {
       SUMMARY += `- ${key}`
