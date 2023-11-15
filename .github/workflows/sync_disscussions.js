@@ -30,19 +30,49 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
 
   const query = `
     query get_discussions($owner: String!, $repo: String!, $after: String, $limit: Int = 10) {
-      repository(owner: $owner, name: $repo) {
-        discussions(first: $limit, after: $after) {
-          pageInfo {
-            endCursor
-            startCursor
-            hasNextPage
-          }
-          nodes {
-            // GraphQL query structure to fetch discussions
-            // (Nested structure to retrieve necessary information)
+      repository(owner:$owner, name: $repo) {
+          discussions(first: $limit, after:$after) {
+            pageInfo {
+                endCursor
+                startCursor
+                hasNextPage
+              }
+            nodes {
+              id
+              labels(first: 10) {
+                nodes {
+                  id
+                  name
+                  resourcePath
+                  url
+                }
+              }
+              category {
+                id
+                name
+                emoji
+                emojiHTML
+                slug
+              }
+              number
+              title
+              body
+              author {
+                login
+              }
+              authorAssociation
+              createdAt
+              updatedAt
+              repository {
+                id
+                url
+                resourcePath
+              }
+              url
+              resourcePath
+            }
           }
         }
-      }
     }`;
 
   // Create a GraphQL client with authorization headers
