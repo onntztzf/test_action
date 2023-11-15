@@ -119,6 +119,7 @@ async function main() {
   console.log('Fetched', allDiscussions.length, 'discussions.');
 
   const discussionMap = new Map();
+  const writePromises = []
   for (let i = 0; i < allDiscussions.length; i++) {
     const v = allDiscussions[i];
     if (v.authorAssociation !== "OWNER") {
@@ -129,13 +130,7 @@ async function main() {
     if (existing && dayjs(existing.updatedAt).isAfter(dayjs(v.updatedAt))) {
       continue
     }
-    discussionMap.set(key, v);
-  }
 
-  const finalDiscussions = Array.from(discussionMap.values());
-  const writePromises = []
-  for (let i = 0; i < finalDiscussions.length; i++) {
-    const v = finalDiscussions[i];
     const jsonFilePath = `discussions/${v.number}_${v.id}.json`;
     writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
@@ -158,20 +153,22 @@ async function main() {
     const month = createdAtInCST.month() + 1;
     const mdFilePath = `markdowns/${year}/${month}/${v.number}_${v.id}.md`;
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
+
+    discussionMap.set(key, v);
   }
 
-  // let README = "# README\n\n";
-  // README += "Just a repository for blogs. :)\n\n";
-  // README += "## Table of Contents\n\n";
-  // README += "| Directory | File | Last Updated |\n";
-  // README += "| --- | --- | --- |\n";
-  // for (let i = 0; i < contents.length; i++) {
-  //   const v = contents[i];
-  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  // }
-  // README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-  // README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-  // writePromises.push(writeToFileSync("README.md", README));
+  let README = "# README\n\n";
+  README += "Just a repository for blogs. :)\n\n";
+  README += "## Table of Contents\n\n";
+  README += "| Category | Article | Last Updated |\n";
+  README += "| --- | --- | --- |\n";
+  for (let i = 0; i < contents.length; i++) {
+    const v = contents[i];
+    README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+  }
+  README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+  README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+  writePromises.push(writeToFileSync("README.md", README));
 
   // let SUMMARY = "# SUMMARY\n\n";
   // SUMMARY += "Just a repository for blogs. :)\n\n";
