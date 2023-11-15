@@ -48,5 +48,5 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
-          git commit -m "Update markdown content"
+          git commit -m "Sync disscussions to repo"
           git push origin HEAD:${{ github.ref }}
