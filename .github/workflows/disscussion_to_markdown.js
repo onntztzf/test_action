@@ -216,14 +216,15 @@ async function main() {
   let lastKey = ''
   SUMMARYData.forEach(function (value, key, map) {
     if (lastKey !== key) {
-      SUMMARY += `- ${key}`
+      SUMMARY += `- [${key}]${key}\n`
     }
     for (let i = 0; i < value.length; i++) {
       const element = value[i];
-      SUMMARY += `  - ${element}`
+      SUMMARY += `  - ${element}\n`
     }
     lastKey = key
   })
+  SUMMARY += "\n"
   writePromises.push(writeToFileSync("SUMMARY.md", SUMMARY));
 
   await Promise.all(writePromises);
