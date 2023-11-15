@@ -137,20 +137,13 @@ async function main() {
 
   function orderDiscussion(a, b) {
     const indexA = categoryOrder.indexOf(a.category.slug);
-    const indexB = categoryOrder.indexOf(a.category.slug);
-
-    // 按照用户定义的标签名字正确序列进行排序
-    if (indexA > indexB) {
-      return 1;
-    } else if (indexA < indexB) {
-      return -1;
+    const indexB = categoryOrder.indexOf(b.category.slug);
+    if (indexA !== indexB) {
+      return indexA - indexB;
     }
-    if (dayjs(a.updatedAt).isAfter(dayjs(b.updatedAt))) {
-      return -1
-    } else {
-      return 1
-    }
+    return dayjs(b.updatedAt).diff(dayjs(a.updatedAt));
   }
+
   finalDiscussions.sort(orderDiscussion);
 
   console.log(JSON.stringify(finalDiscussions))
