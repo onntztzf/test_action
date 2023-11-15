@@ -100,7 +100,7 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
 // Main asynchronous function to orchestrate the process
 async function main() {
 
-  console.log(process.env)
+  // console.log(process.env)
 
   const repo = process.env.GITHUB_REPOSITORY;
 
@@ -122,14 +122,19 @@ async function main() {
   for (let i = 0; i < allDiscussions.length; i++) {
     const v = allDiscussions[i];
     if (v.authorAssociation !== "OWNER") {
+      console.log(1)
       continue
     }
     const key = `${v.number}_${v.id}`;
     const existing = discussionMap.get(key);
-    if (!existing || dayjs(v.updatedAt).isAfter(dayjs(existing.updatedAt))) {
-      discussionMap.set(key, v);
+    if (existing && dayjs(existing.updatedAt).isAfter(dayjs(v.updatedAt))) {
+      console.log(2)
+      continue
     }
+    discussionMap.set(key, v);
   }
+  console.log('Final', JSON.stringify(discussionMap));
+
   const finalDiscussions = discussionMap.values()
 
   console.log('Final', finalDiscussions.length, 'discussions.');
