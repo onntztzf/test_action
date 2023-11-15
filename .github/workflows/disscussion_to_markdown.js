@@ -209,7 +209,7 @@ async function main() {
     README += `| ${v[0]} | ${v[1]} | ${v[2]} | ${v[3]} |\n`;
   }
   README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-  README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+  README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)\n"
   writePromises.push(writeToFileSync("README.md", README));
 
   let SUMMARY = "# SUMMARY\n\n";
@@ -220,10 +220,11 @@ async function main() {
     }
     for (let i = 0; i < value.length; i++) {
       const element = value[i];
-      SUMMARY += `  - ${element}\n`
+      SUMMARY += `  - ${element}"\n"`
     }
     lastKey = key
   })
+  SUMMARY.trim()
   SUMMARY += "\n"
   writePromises.push(writeToFileSync("SUMMARY.md", SUMMARY));
 
