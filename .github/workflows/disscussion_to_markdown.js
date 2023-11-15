@@ -144,7 +144,7 @@ async function main() {
       category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
       labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
       discussion: v.url || '',
-      updated_at: updatedAtInUTC.utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
+      updated_at: dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
     };
     const frontMatter = Object.entries(metadata)
       .map(([key, value]) => `${key}: ${value}`)
