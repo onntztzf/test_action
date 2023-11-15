@@ -133,58 +133,62 @@ async function main() {
   }
 
   const finalDiscussions = Array.from(discussionMap.values());
-  console.log('Final', finalDiscussions.length, 'discussions.');
+  const writePromises = []
+  for (let i = 0; i < finalDiscussions.length; i++) {
+    const v = finalDiscussions[i];
+    const jsonFilePath = `discussions/${v.number}_${v.id}.json`;
+    writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
+    const metadata = {
+      author: v.author?.login || '',
+      category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
+      labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
+      discussion: v.url || '',
+      updated_at: updatedAtInUTC.utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
+    };
+    const frontMatter = Object.entries(metadata)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
+    const markdownTitle = `# ${v.title || 'Unknown Title'}`;
+    const markdownBody = v.body.trim() || 'No content';
+    const createdAtInCST = dayjs(v.createdAt).utcOffset(8)
+    // 获取年份
+    const year = createdAtInCST.year();
+    // 获取月份（注意：月份从 0 开始，所以需要加 1）
+    const month = createdAtInCST.month() + 1;
+    const mdFilePath = `markdowns/${year}/${month}/${v.number}_${v.id}.md`;
+    writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
+  }
 
-  // const discussionMap = new Map();
-  // for (let i = 0; i < allDiscussions.length; i++) {
-  //   const v = allDiscussions[i];
-  //   if (v.authorAssociation !== "OWNER") {
-  //     continue
-  //   }
-  //   const updatedAtInUTC = dayjs(v.updatedAt);
-
-  //   const key = `${v.number}_${v.id}`;
-  //   const existing = discussionMap.get(key);
-  //   if (!existing || existing.updateTime > existing.updateTime) {
-  //     discussionMap.set(key, obj);
-  //   }
-
-
-
-  //   const jsonFilePath = `discussions/${v.number}_${v.id}.json`;
-  //   const createdAtInUTC = dayjs(v.createdAt);
-
-  //   const metadata = {
-  //     author: v.author?.login || '',
-  //     category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
-  //     labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
-  //     discussion: v.url || '',
-  //     updated_at: updatedAtInUTC.utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
-  //   };
-  //   const frontMatter = Object.entries(metadata)
-  //     .map(([key, value]) => `${key}: ${value}`)
-  //     .join('\n');
-  //   const markdownTitle = `# ${discussion.title || 'Unknown Title'}`;
-  //   const markdownBody = discussion.body.trim() || 'No content';
-  //   const createdAtInCST = createdAtInUTC.utcOffset(8)
-  //   // 获取年份
-  //   const year = createdAtInCST.year();
-  //   // 获取月份（注意：月份从 0 开始，所以需要加 1）
-  //   const month = createdAtInCST.month() + 1;
-  //   const mdFilePath = `markdowns/${year}/${month}/${discussion.number}_${discussion.id}.md`;
-  //   return {}
+  // let README = "# README\n\n";
+  // README += "Just a repository for blogs. :)\n\n";
+  // README += "## Table of Contents\n\n";
+  // README += "| Directory | File | Last Updated |\n";
+  // README += "| --- | --- | --- |\n";
+  // for (let i = 0; i < contents.length; i++) {
+  //   const v = contents[i];
+  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
   // }
+  // README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+  // README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+  // writePromises.push(writeToFileSync("README.md", README));
 
-  // const writePromises = allDiscussions.map(async (discussion) => {
-  //   try {
-  //     const jsonFilePath = `discussions/${discussion.number}_${discussion.id}.json`;
-  //     await writeToFileSync(jsonFilePath, JSON.stringify(discussion, null, 2));
-  //   } catch (error) {
-  //     console.error('Error processing discussion:', error);
-  //     throw error;
-  //   }
-  // });
+  // let SUMMARY = "# SUMMARY\n\n";
+  // SUMMARY += "Just a repository for blogs. :)\n\n";
+  // SUMMARY += "## Table of Contents\n\n";
+  // SUMMARY += "| Directory | File | Last Updated |\n";
+  // SUMMARY += "| --- | --- | --- |\n";
+  // for (let i = 0; i < contents.length; i++) {
+  //   const v = contents[i];
+  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+  // }
+  // SUMMARY += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
+  // SUMMARY += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
+  // writePromises.push(writeToFileSync("SUMMARY.md", SUMMARY));
+
+  await Promise.all(writePromises);
+
+
 
   // const contents = [];
   // const writePromises = allDiscussions.map(async (discussion) => {
@@ -227,33 +231,7 @@ async function main() {
   // });
   // await Promise.all(writePromises);
 
-  // let README = "# README\n\n";
-  // README += "Just a repository for blogs. :)\n\n";
-  // README += "## Table of Contents\n\n";
-  // README += "| Directory | File | Last Updated |\n";
-  // README += "| --- | --- | --- |\n";
-  // for (let i = 0; i < contents.length; i++) {
-  //     const v = contents[i];
-  //     README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  // }
-  // README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-  // README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-  // await writeToFileSync("README.md", README)
-
-  // let SUMMARY = "# SUMMARY\n\n";
-  // SUMMARY += "Just a repository for blogs. :)\n\n";
-  // SUMMARY += "## Table of Contents\n\n";
-  // SUMMARY += "| Directory | File | Last Updated |\n";
-  // SUMMARY += "| --- | --- | --- |\n";
-  // for (let i = 0; i < contents.length; i++) {
-  //     const v = contents[i];
-  //     README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  // }
-  // SUMMARY += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-  // SUMMARY += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-  // await writeToFileSync("README.md", SUMMARY)
-
-  console.log("Done. Total discussions:", allDiscussions.length);
+  console.log("Done. Total discussions:", finalDiscussions.length);
 }
 
 // Execute the main function to start the process
