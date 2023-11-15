@@ -178,7 +178,7 @@ async function main() {
     };
 
     const frontMatter = Object.entries(metadata)
-      .map(([key, value]) => `${key}: ${value}`)
+      .map(([key, value]) => `${key}: ${value || "-"}`)
       .join('\n');
 
     const markdownTitle = `# ${v.title || 'Unknown Title'}`;
