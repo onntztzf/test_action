@@ -216,7 +216,7 @@ async function main() {
   let lastKey = ''
   SUMMARYData.forEach(function (value, key, map) {
     if (lastKey !== key) {
-      SUMMARY += `- [${key}]${key}\n`
+      SUMMARY += `- [${key}](${key})\n`
     }
     for (let i = 0; i < value.length; i++) {
       const element = value[i];
