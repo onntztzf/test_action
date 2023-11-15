@@ -194,7 +194,7 @@ async function main() {
     } else {
       existing = []
     }
-    SUMMARYData.set(key, v);
+    SUMMARYData.set(key, existing);
   }
 
   console.log(SUMMARYData)
