@@ -150,6 +150,7 @@ async function main() {
 
   const writePromises = []
   const READMEData = []
+  const SUMMARYData = new Map()
   for (let i = 0; i < finalDiscussions.length; i++) {
     const v = finalDiscussions[i];
 
@@ -186,7 +187,17 @@ async function main() {
       labels.push(`[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`)
     }
     READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(","), metadata.updatedAt])
+    const key = `${year}/${month}`;
+    const existing = SUMMARYData.get(key);
+    if (existing) {
+      existing.push(`[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`)
+    } else {
+      existing = []
+    }
+    SUMMARYData.set(key, v);
   }
+
+  console.log(SUMMARYData)
 
   let README = "# README\n\n";
   README += "Just a repository for blogs. :)\n\n";
@@ -201,18 +212,19 @@ async function main() {
   README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
   writePromises.push(writeToFileSync("README.md", README));
 
-  // let SUMMARY = "# SUMMARY\n\n";
-  // SUMMARY += "Just a repository for blogs. :)\n\n";
-  // SUMMARY += "## Table of Contents\n\n";
-  // SUMMARY += "| Directory | File | Last Updated |\n";
-  // SUMMARY += "| --- | --- | --- |\n";
-  // for (let i = 0; i < contents.length; i++) {
-  //   const v = contents[i];
-  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  // }
-  // SUMMARY += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
-  // SUMMARY += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
-  // writePromises.push(writeToFileSync("SUMMARY.md", SUMMARY));
+  let SUMMARY = "# SUMMARY\n\n";
+  const lastKey = ''
+  SUMMARYData.forEach(function (value, key, map) {
+    if (lastKey !== key) {
+      SUMMARY += `- ${key}`
+    }
+    for (let i = 0; i < value.length; i++) {
+      const element = value[i];
+      SUMMARY += `  - ${element}`
+    }
+    lastKey = key
+  })
+  writePromises.push(writeToFileSync("SUMMARY.md", SUMMARY));
 
   await Promise.all(writePromises);
 
