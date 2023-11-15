@@ -136,8 +136,7 @@ async function main() {
   }
   console.log('Final', discussionMap);
 
-  const finalDiscussions = discussionMap.values()
-
+  const finalDiscussions = Array.from(discussionMap.values());
   console.log('Final', finalDiscussions, 'discussions.');
 
 
