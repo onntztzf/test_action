@@ -138,7 +138,7 @@ async function main() {
 
   const finalDiscussions = discussionMap.values()
 
-  console.log('Final', finalDiscussions.length, 'discussions.');
+  console.log('Final', finalDiscussions, 'discussions.');
 
 
   // const discussionMap = new Map();
