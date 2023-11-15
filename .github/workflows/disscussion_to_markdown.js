@@ -132,6 +132,7 @@ async function main() {
       continue
     }
     discussionMap.set(key, v);
+    console.log(3)
   }
   console.log('Final', JSON.stringify(discussionMap));
 
