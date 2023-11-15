@@ -134,7 +134,7 @@ async function main() {
     discussionMap.set(key, v);
     console.log(3)
   }
-  console.log('Final', JSON.stringify(discussionMap));
+  console.log('Final', discussionMap);
 
   const finalDiscussions = discussionMap.values()
 
