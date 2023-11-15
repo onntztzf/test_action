@@ -58,8 +58,6 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
                   login
                 }
                 authorAssociation
-                publishedAt
-                lastEditedAt
                 createdAt
                 updatedAt
                 repository {
