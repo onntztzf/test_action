@@ -185,10 +185,10 @@ async function main() {
   README += "## Table of Contents\n\n";
   README += "| Category | Article | Last Updated |\n";
   README += "| --- | --- | --- |\n";
-  for (let i = 0; i < contents.length; i++) {
-    const v = contents[i];
-    README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  }
+  // for (let i = 0; i < contents.length; i++) {
+  //   const v = contents[i];
+  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+  // }
   README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
   README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
   writePromises.push(writeToFileSync("README.md", README));
