@@ -119,7 +119,6 @@ async function main() {
   console.log('Fetched', allDiscussions.length, 'discussions.');
 
   const discussionMap = new Map();
-  const writePromises = []
   for (let i = 0; i < allDiscussions.length; i++) {
     const v = allDiscussions[i];
     if (v.authorAssociation !== "OWNER") {
@@ -130,7 +129,31 @@ async function main() {
     if (existing && dayjs(existing.updatedAt).isAfter(dayjs(v.updatedAt))) {
       continue
     }
+    discussionMap.set(key, v);
+  }
 
+  const finalDiscussions = Array.from(discussionMap.values());
+  const categoryOrder = ['announcements', 'show-and-tell'];
+
+  function orderDiscussion(a, b) {
+    const indexA = categoryOrder.indexOf(a.tagName);
+    const indexB = categoryOrder.indexOf(b.tagName);
+
+    // 按照用户定义的标签名字正确序列进行排序
+    if (indexA > indexB) {
+      return 1;
+    } else if (indexA < indexB) {
+      return -1;
+    }
+    return b.id - a.id; // 降序
+    // 若要升序排列，可以改为: return a.updateTime - b.updateTime;
+  }
+  finalDiscussions.sort(orderDiscussion);
+
+  console.log(JSON.stringify(finalDiscussions))
+
+  const writePromises = []
+  for (let i = 0; i < finalDiscussions.length; i++) {
     const jsonFilePath = `discussions/${v.number}_${v.id}.json`;
     writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
@@ -153,8 +176,6 @@ async function main() {
     const month = createdAtInCST.month() + 1;
     const mdFilePath = `markdowns/${year}/${month}/${v.number}_${v.id}.md`;
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
-
-    discussionMap.set(key, v);
   }
 
   let README = "# README\n\n";
