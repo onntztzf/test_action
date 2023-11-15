@@ -181,7 +181,7 @@ async function main() {
       .map(([key, value]) => `${key}: ${value || '"-"'}`)
       .join('\n');
 
-    const markdownTitle = `# ${v.title || 'Unknown Title'}`;
+    const markdownTitle = `# ${v.title || 'Unknown title'}`;
     const markdownBody = v.body.trim() || 'No content';
 
     const createdAtInCST = dayjs(v.createdAt).utcOffset(8);
@@ -193,7 +193,7 @@ async function main() {
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
 
     const labels = v.labels?.nodes.map(label => `[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`);
-    READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(", ") || "-", metadata.updatedAt]);
+    READMEData.push([metadata.category ? `[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)` : "-", `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(", ") || "-", metadata.updatedAt || "-"]);
 
     const key = `${year}/${month}`;
     SUMMARYData.set(key, [...(SUMMARYData.get(key) || []), `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`]);
