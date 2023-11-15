@@ -174,18 +174,28 @@ async function main() {
     // 获取月份（注意：月份从 0 开始，所以需要加 1）
     const month = createdAtInCST.month() + 1;
     const mdFilePath = `markdowns/${year}/${month}/${v.number}_${v.id}.md`;
-    READMEData.push([`${metadata.category}`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, metadata.updatedAt])
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
+    // https://github.com/onntztzf/test_action/discussions?discussions_q=
+    //label
+    // https://github.com/onntztzf/test_action/discussions?discussions_q=label%3Adocumentation
+    //category
+    // https://github.com/onntztzf/test_action/discussions/categories/announcements?discussions_q=
+    const labels = []
+    for (let i = 0; i < v.labels?.nodes.length; i++) {
+      const label = v.labels?.nodes[i];
+      labels.push(`[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`)
+    }
+    READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(","), metadata.updatedAt])
   }
 
   let README = "# README\n\n";
   README += "Just a repository for blogs. :)\n\n";
   README += "## Table of Contents\n\n";
-  README += "| Category | Article | Last Updated |\n";
+  README += "| Category | Article | Labels| Last Updated |\n";
   README += "| --- | --- | --- |\n";
   for (let i = 0; i < READMEData.length; i++) {
     const v = READMEData[i];
-    README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+    README += `| ${v[0]} | ${v[1]} | ${v[2]} | ${v[3]} |\n`;
   }
   README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
   README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
