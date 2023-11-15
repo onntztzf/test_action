@@ -136,8 +136,8 @@ async function main() {
   const categoryOrder = ['announcements', 'show-and-tell'];
 
   function orderDiscussion(a, b) {
-    const indexA = categoryOrder.indexOf(a.tagName);
-    const indexB = categoryOrder.indexOf(b.tagName);
+    const indexA = categoryOrder.indexOf(a.category.slug);
+    const indexB = categoryOrder.indexOf(a.category.slug);
 
     // 按照用户定义的标签名字正确序列进行排序
     if (indexA > indexB) {
@@ -154,6 +154,8 @@ async function main() {
 
   const writePromises = []
   for (let i = 0; i < finalDiscussions.length; i++) {
+    const v = finalDiscussions[i];
+
     const jsonFilePath = `discussions/${v.number}_${v.id}.json`;
     writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
