@@ -191,8 +191,8 @@ async function main() {
   let README = "# README\n\n";
   README += "Just a repository for blogs. :)\n\n";
   README += "## Table of Contents\n\n";
-  README += "| Category | Article | Labels| Last Updated |\n";
-  README += "| --- | --- | --- |\n";
+  README += "| Category | Article | Labels | Last Updated |\n";
+  README += "| --- | --- | --- | --- |\n";
   for (let i = 0; i < READMEData.length; i++) {
     const v = READMEData[i];
     README += `| ${v[0]} | ${v[1]} | ${v[2]} | ${v[3]} |\n`;
