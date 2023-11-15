@@ -1,0 +1,52 @@
+name: Sync Disscussions Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Person to greet'
+        default: 'World'
+        required: true
+        type: string
+
+jobs:
+  sync_disscussions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4.0.0
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Install Dependencies
+        run: |
+          npm install @octokit/graphql
+          npm install dayjs
+      - name: Run Markdown Generation Script
+        run: node .github/workflows/sync_disscussions.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update Repository Content
+        run: |
+          # Enable extended globbing for advanced pattern matching
+          shopt -s extglob
+
+          # Remove all content in the current directory except for specified files and directories
+          rm -r !(markdowns|discussions|README.md|SUMMARY.md)
+
+          # Move all files from the 'markdowns' directory to the current directory
+          mv -f markdowns/* .
+
+          # Remove the 'markdowns' directory
+          rm -rf markdowns
+
+          # List the contents of the current directory
+          ls
+      - name: Commit and Push Changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Sync disscussions to repo"
+          git push origin HEAD:${{ github.ref }}
