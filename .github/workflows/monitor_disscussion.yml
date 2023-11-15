@@ -20,22 +20,24 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v4.0.0
     - name: Install dependencies
-      run: npm install @octokit/graphql
+      run: |
+        npm install @octokit/graphql
+        npm install dayjs
     - name: Run script
       run: node .github/workflows/disscussion_to_markdown.js
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: commit
-      run: |
-        shopt -s extglob
-        # rm -r !(markdowns|discussions|README.md)
-        # mv -f markdowns/* .
-        # rm -rf markdowns
-        ls
-    - name: Commit and Push
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git add .
-        git commit -m "test"
-        git push origin HEAD:${{ github.ref }}
+    # - name: commit
+    #   run: |
+    #     shopt -s extglob
+    #     # rm -r !(markdowns|discussions|README.md)
+    #     # mv -f markdowns/* .
+    #     # rm -rf markdowns
+    #     ls
+    # - name: Commit and Push
+    #   run: |
+    #     git config user.name github-actions
+    #     git config user.email github-actions@github.com
+    #     git add .
+    #     git commit -m "test"
+    #     git push origin HEAD:${{ github.ref }}
