@@ -186,7 +186,7 @@ async function main() {
       const label = v.labels?.nodes[i];
       labels.push(`[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`)
     }
-    READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(","), metadata.updatedAt])
+    READMEData.push([`[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(", "), metadata.updatedAt])
     const key = `${year}/${month}`;
     let existing = SUMMARYData.get(key);
     if (existing) {
