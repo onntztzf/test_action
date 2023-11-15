@@ -145,14 +145,18 @@ async function main() {
     } else if (indexA < indexB) {
       return -1;
     }
-    return b.id - a.id; // 降序
-    // 若要升序排列，可以改为: return a.updateTime - b.updateTime;
+    if (dayjs(a.updatedAt).isAfter(dayjs(b.updatedAt))) {
+      return -1
+    } else {
+      return 1
+    }
   }
   finalDiscussions.sort(orderDiscussion);
 
   console.log(JSON.stringify(finalDiscussions))
 
   const writePromises = []
+  const READMEData = []
   for (let i = 0; i < finalDiscussions.length; i++) {
     const v = finalDiscussions[i];
 
@@ -164,7 +168,7 @@ async function main() {
       category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
       labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
       discussion: v.url || '',
-      updated_at: dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
+      updatedAt: dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
     };
     const frontMatter = Object.entries(metadata)
       .map(([key, value]) => `${key}: ${value}`)
@@ -177,6 +181,7 @@ async function main() {
     // 获取月份（注意：月份从 0 开始，所以需要加 1）
     const month = createdAtInCST.month() + 1;
     const mdFilePath = `markdowns/${year}/${month}/${v.number}_${v.id}.md`;
+    READMEData.push([`${metadata.category}`, `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, metadata.updatedAt])
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
   }
 
@@ -185,10 +190,10 @@ async function main() {
   README += "## Table of Contents\n\n";
   README += "| Category | Article | Last Updated |\n";
   README += "| --- | --- | --- |\n";
-  // for (let i = 0; i < contents.length; i++) {
-  //   const v = contents[i];
-  //   README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
-  // }
+  for (let i = 0; i < READMEData.length; i++) {
+    const v = READMEData[i];
+    README += `| ${v[0]} | ${v[1]} | ${v[2]} |\n`;
+  }
   README += "\n如果觉得文章不错，可以关注公众号哟！\n\n"
   README += "![干货输出机](https://file.zhangpeng.site/wechat/qrcode.jpg)"
   writePromises.push(writeToFileSync("README.md", README));
