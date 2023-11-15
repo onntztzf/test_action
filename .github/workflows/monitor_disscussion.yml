@@ -30,7 +30,7 @@ jobs:
     - name: commit
       run: |
         shopt -s extglob
-        rm -r !(markdowns|discussions|README.md)
+        rm -r !(markdowns|discussions|README.md|SUMMARY.md)
         mv -f markdowns/* .
         rm -rf markdowns
         ls
