@@ -122,22 +122,18 @@ async function main() {
   for (let i = 0; i < allDiscussions.length; i++) {
     const v = allDiscussions[i];
     if (v.authorAssociation !== "OWNER") {
-      console.log(1)
       continue
     }
     const key = `${v.number}_${v.id}`;
     const existing = discussionMap.get(key);
     if (existing && dayjs(existing.updatedAt).isAfter(dayjs(v.updatedAt))) {
-      console.log(2)
       continue
     }
     discussionMap.set(key, v);
-    console.log(3)
   }
-  console.log('Final', discussionMap);
 
   const finalDiscussions = Array.from(discussionMap.values());
-  console.log('Final', finalDiscussions, 'discussions.');
+  console.log('Final', finalDiscussions.length, 'discussions.');
 
 
   // const discussionMap = new Map();
