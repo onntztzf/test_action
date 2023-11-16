@@ -165,16 +165,19 @@ async function main() {
     // Write discussion data to a JSON file
     writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
+    const category = `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`;
+    const updatedAtInCST = dayjs(v.updatedAt).utcOffset(8).format();
+    const labels = (v.labels?.nodes || []).map(label => label.name).join(', ');
     const metadata = {
-      author: v.author?.login || '',
-      category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
-      labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
-      discussion: v.url || '',
-      updatedAt: `"${dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss')}"` || '',
+      author: v.author?.login || '-',
+      category: category || '-',
+      labels: labels || '-',
+      discussion: v.url || '-',
+      updatedAt: `"${updatedAtInCST.format()}"` || '-',
     };
 
     const frontMatter = Object.entries(metadata)
-      .map(([key, value]) => `${key}: ${value || '"-"'}`)
+      .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
 
     const markdownTitle = `# ${v.title || 'Unknown title'}`;
@@ -188,8 +191,9 @@ async function main() {
     // Write metadata and discussion content to a markdown file
     writePromises.push(writeToFileSync(mdFilePath, `---\n${frontMatter}\n---\n\n${markdownTitle}\n\n${markdownBody}\n`));
 
-    const labels = v.labels?.nodes.map(label => `[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`);
-    READMEData.push([metadata.category ? `[${metadata.category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)` : "-", `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labels.join(", ") || "-", metadata.updatedAt || "-"]);
+    const categoryInREADME = category ? `[${category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)` : "";
+    const labelsInREADME = v.labels?.nodes.map(label => `[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`).join(", ") || "";
+    READMEData.push([categoryInREADME || "-", `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labelsInREADME || "-", updatedAtInCST || "-"]);
 
     const key = `${year}/${month}`;
     SUMMARYData.set(key, [...(SUMMARYData.get(key) || []), `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`]);
