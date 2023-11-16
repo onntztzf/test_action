@@ -170,7 +170,7 @@ async function main() {
       category: `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`,
       labels: (v.labels?.nodes || []).map(label => label.name).join(', '),
       discussion: v.url || '',
-      updatedAt: dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss') || '',
+      updatedAt: `"${dayjs(v.updatedAt).utcOffset(8).format('YYYY-MM-DD HH:mm:ss')}"` || '',
     };
 
     const frontMatter = Object.entries(metadata)
