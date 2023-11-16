@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Sync Disscussions Workflow
-        uses: onntztzf/sync_disscussions@v1.0.0
+        uses: onntztzf/sync_disscussions@v1.0.1
             
       # - name: Setup Node.js Environment
       #   uses: actions/setup-node@v4.0.0
