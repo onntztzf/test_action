@@ -169,11 +169,11 @@ async function main() {
     const updatedAtInCST = dayjs(v.updatedAt).utcOffset(8);
     const labels = (v.labels?.nodes || []).map(label => label.name).join(', ');
     const metadata = {
-      author: v.author?.login || '-',
-      category: category || '-',
-      labels: labels || '-',
-      discussion: v.url || '-',
-      updatedAt: `"${updatedAtInCST.format()}"` || '-',
+      author: v.author?.login || '"-"',
+      category: category || '"-"',
+      labels: labels || '"-"',
+      discussion: v.url || '"-"',
+      updatedAt: `"${updatedAtInCST.format()}"` || '"-"',
     };
 
     const frontMatter = Object.entries(metadata)
