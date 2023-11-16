@@ -166,7 +166,7 @@ async function main() {
     writePromises.push(writeToFileSync(jsonFilePath, JSON.stringify(v, null, 2)));
 
     const category = `${v.category?.emojiHTML ? v.category.emojiHTML.match(/>(.*?)</)?.[1] + ' ' : ''}${v.category?.name || ''}`;
-    const updatedAtInCST = dayjs(v.updatedAt).utcOffset(8).format();
+    const updatedAtInCST = dayjs(v.updatedAt).utcOffset(8);
     const labels = (v.labels?.nodes || []).map(label => label.name).join(', ');
     const metadata = {
       author: v.author?.login || '-',
@@ -193,7 +193,7 @@ async function main() {
 
     const categoryInREADME = category ? `[${category}](https://github.com/onntztzf/test_action/discussions/categories/${v.category?.slug}?discussions_q=)` : "";
     const labelsInREADME = v.labels?.nodes.map(label => `[${label.name}](https://github.com/onntztzf/test_action/discussions?discussions_q=label%3A${label.name})`).join(", ") || "";
-    READMEData.push([categoryInREADME || "-", `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labelsInREADME || "-", updatedAtInCST || "-"]);
+    READMEData.push([categoryInREADME || "-", `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`, labelsInREADME || "-", updatedAtInCST.format() || "-"]);
 
     const key = `${year}/${month}`;
     SUMMARYData.set(key, [...(SUMMARYData.get(key) || []), `[${v.title}](${year}/${month}/${v.number}_${v.id}.md)`]);
