@@ -42,4 +42,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "Sync disscussions to repo"
-          git push origin HEAD:${{ github.ref }}
+          git push -f origin HEAD:${{ github.ref }}
