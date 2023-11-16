@@ -1,7 +1,5 @@
 name: Sync Disscussions Workflow
 
-description: Sync discussions to the repository.
-
 on: workflow_dispatch
 
 jobs:
