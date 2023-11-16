@@ -16,7 +16,6 @@ async function writeToFileSync(filePath, data) {
     // Write data to the file
     await fs.writeFile(filePath, data);
   } catch (error) {
-    // Log and rethrow any errors
     console.error('Error writing file:', error);
     throw error;
   }
@@ -87,7 +86,6 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
     try {
       const response = await graphqlWithAuth(query, { owner, repo, after: afterCursor, limit });
       const discussions = response.repository.discussions.nodes;
-      // Log fetched discussions
       console.log(`Fetched ${discussions.length} discussions.`);
       allDiscussions.push(...discussions);
 
@@ -95,7 +93,6 @@ async function fetchDiscussions(token, owner, repo, limit = 10) {
       hasMore = pageInfo.hasNextPage;
       afterCursor = pageInfo.endCursor;
     } catch (error) {
-      // Log and rethrow any errors during discussions fetching
       console.error('Error fetching discussions:', error.message);
       throw error;
     }
@@ -155,7 +152,6 @@ async function main() {
     return dayjs(b.updatedAt).diff(dayjs(a.updatedAt));
   });
 
-  // Log the final discussions in JSON format
   console.log(JSON.stringify(finalDiscussions));
 
   // Array to store promises for writing files
@@ -243,7 +239,6 @@ async function main() {
   // Wait for all write operations to complete
   await Promise.all(writePromises);
 
-  // Log completion message along with the total number of discussions
   console.log("Done. Total discussions:", finalDiscussions.length);
 }
 
